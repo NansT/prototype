@@ -1,0 +1,154 @@
+<html>
+
+	<head>
+		<script type="text/javascript" src="/hc.js"></script>
+	</head>
+
+	<body bgcolor="#adebad">
+    <div style="width: auto; margin:0 auto;">
+
+      <div style="width: auto; background-color: #5cd65c; padding: 10px; margin: 5px; display: inline-block; border-radius: 10px;">
+        <form>
+          Add the following resource
+          <hr/>
+          <span style="width: 100px; display: inline-block;">
+            <label for="type">Type</label>
+          </span>
+          <select id="type_add" style="width: 200px;" required>
+            <option value="" disabled="true" selected="true">~SELECT ONE~</option>
+            <option value="tree">Tree</option>
+            <option value="log">Log</option>
+            <option value="plank">Plank</option>
+            <option value="wooden product">Wooden Product</option>
+            <option value="I_am_error">I will not work</option>
+          </select>
+          <br/>
+          <span style="width: 100px; display: inline-block;">
+            <label for="id">Id</label>
+          </span>
+          <input type="text" id="id" placeholder="id" style="width: 200px;" required/>
+          <br/>
+          <button type="submit" id="submitResource" style="text-align: center; float: right;">Submit resource</button>
+          <br/>
+          <hr/>
+          <span style="width: 100px; display: inline-block;">
+            <label for="type">&rarr; Hash</label>
+          </span>
+          <input type="text" id="result_hash" placeholder="..." style="width: 200px;" readonly/>
+          <br/>
+          <button type="submit" id="copyHash" style="text-align: center; float: right;">Copy hash</button>
+        </form>
+      </div>
+
+      <br/>
+
+      <div style="width: auto; background-color: #5cd65c; padding: 10px; margin: 5px; display: inline-block; border-radius: 10px;">
+        <form>
+          Get resource by hash
+          <hr/>
+          <span style="width: 100px; display: inline-block;">
+            <label for="hash">Hash</label>
+          </span>
+          <input type="text" id="hash" placeholder="hash" style="width: 200px;" required/>
+          <br/>
+          <button type="submit" id="submitHash" style="text-align: center; float: right;">Submit hash</button>
+          <br/>
+          <hr/>
+          <span style="width: 100px; display: inline-block;">
+            <label for="type">&rarr; Type</label>
+          </span>
+          <input type="text" id="result_type" placeholder="..." style="width: 200px;" readonly/>
+          <br/>
+          <span style="width: 100px; display: inline-block;">
+            <label for="type">&rarr; Id</label>
+          </span>
+          <input type="text" id="result_id" placeholder="..." style="width: 200px;" readonly/>
+        </form>
+      </div>
+
+      <br/>
+
+      <div style="width: auto; background-color: #5cd65c; padding: 10px; margin: 5px; display: inline-block; border-radius: 10px;">
+        <form>
+          Get resources by type
+          <hr/>
+          <span style="width: 100px; display: inline-block;">
+            <label for="type">Type</label>
+          </span>
+          <select id="type_get" style="width: 200px;" required>
+            <option value="" disabled="true" selected="true">~SELECT ONE~</option>
+            <option value="tree">Tree</option>
+            <option value="log">Log</option>
+            <option value="plank">Plank</option>
+            <option value="wooden product">Wooden Product</option>
+            <option value="I_am_error">I will not work</option>
+          </select>
+          <br/>
+          <button type="submit" id="submitType" style="text-align: center; float: right;">Submit resource</button>
+          <br/>
+          <hr/>
+          <div id="result_resources" style="background-color: white; width: 300px; min-height: 30px;  padding: 5px;"/>
+        </form>
+      </div>
+
+    </div>
+
+		<script type="text/javascript">
+
+			document.getElementById("submitResource").addEventListener("click", function(event){
+				event.preventDefault()
+        document.getElementById('result_hash').value = ""
+        var select = document.getElementById("type_add")
+				hcAddResource(
+					{
+						type: select.options[select.selectedIndex].value,
+						id: document.getElementById('id').value
+					},
+					function(result){
+            var hash = JSON.parse(result)
+						document.getElementById('result_hash').value = hash
+					}
+				)
+			});
+
+      document.getElementById("submitHash").addEventListener("click", function(event){
+        event.preventDefault()
+        document.getElementById('result_type').value = ""
+        document.getElementById('result_type').value = ""
+        hcGetResourceFromHash(
+          document.getElementById('hash').value,
+          function(result){
+            var data = JSON.parse(result)
+            document.getElementById('result_type').value = data.type
+            document.getElementById('result_id').value = data.id
+          }
+        )
+      });
+
+      document.getElementById("copyHash").addEventListener("click", function(event){
+        event.preventDefault()
+        document.getElementById("hash").value = document.getElementById('result_hash').value
+        document.getElementById("hash").select()
+        document.execCommand("copy")
+      });
+
+      document.getElementById("submitType").addEventListener("click", function(event){
+        event.preventDefault()
+        document.getElementById("result_resources").innerText = ""
+        hcGetResourcesFromType(
+          document.getElementById("type_get").value,
+          function(result){
+            var data = JSON.parse(result)
+            data.forEach(function(item){
+              document.getElementById("result_resources").innerText += item.Entry.id
+              document.getElementById("result_resources").innerText += " ("
+              document.getElementById("result_resources").innerText += item.Entry.type
+              document.getElementById("result_resources").innerText += ")\n"
+            })
+          }
+        )
+      });
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,13 @@
+{
+	"title": "Resource Schema",
+	"type": "object",
+	"properties": {
+		"type": {
+			"type": "string"
+		},
+		"id": {
+			"type": "string"
+		}
+	},
+    "required": ["type", "id"]
+}

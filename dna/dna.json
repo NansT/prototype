@@ -1,0 +1,89 @@
+{
+	"Version": 1,
+	"UUID": "b10872b8-7d63-11e8-9308-c85b766ae4ac",
+	"Name": "prototype",
+	"Properties": {
+		"description": "blockchain based solution for wood custody chain",
+		"language": "en"
+	},
+	"PropertiesSchemaFile": "properties_schema.json",
+	"RequiresVersion": 23,
+	"DHTConfig": {
+		"HashType": "sha2-256"
+	},
+	"Zomes": [
+		{
+			"Name": "prototype",
+			"Description": "Data managment",
+			"CodeFile": "prototype.js",
+			"RibosomeType": "js",
+			"Entries": [
+        {
+          "Name": "resource",
+          "DataFormat": "json",
+          "SchemaFile": "resource.json",
+          "Sharing": "public"
+        },
+        {
+          "Name": "type_links",
+          "DataFormat": "links"
+        }
+			],
+			"Functions": [
+				{
+					"Name": "addResource",
+					"CallingType": "json",
+					"Exposure": "public"
+				},
+        {
+          "Name": "getResourceFromHash",
+          "CallingType": "json",
+          "Exposure": "public"
+        },
+        {
+          "Name": "getResourcesFromType",
+          "CallingType": "json",
+          "Exposure": "public"
+        }
+			]
+		},
+    {
+      "Name": "anchors",
+      "Description": "anchors mixin",
+      "RibosomeType": "js",
+      "CodeFile": "anchors.js",
+      "Config": {
+        "ErrorHandling": "throwErrors"
+      },
+      "Entries": [
+        {
+          "Name": "anchor",
+          "DataFormat": "json",
+          "SchemaFile": "anchor.json",
+          "Sharing": "public"
+        },
+        {
+          "Name": "anchor_link",
+          "DataFormat": "links"
+        }
+      ],
+      "Functions": [
+        {
+          "Name": "anchor",
+          "CallingType": "json",
+          "Exposure": "public"
+        },
+        {
+          "Name": "exists",
+          "CallingType": "json",
+          "Exposure": "public"
+        },
+        {
+          "Name": "anchors",
+          "CallingType": "string",
+          "Exposure": "public"
+        }
+      ]
+    }
+	]
+}
